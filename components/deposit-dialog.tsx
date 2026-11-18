@@ -71,11 +71,14 @@ export function DepositDialog({ settings, userId, shortcut = false }: { settings
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button className={shortcut ? "dashboard-shortcut dashboard-shortcut--deposit" : "w-full"}>
+          <Button className={shortcut ? "action-card" : "w-full"}>
             {shortcut ? (
               <>
-                <span className="dashboard-shortcut-orb"><i className="fa-solid fa-building-columns" aria-hidden="true" /></span>
-                <span>Deposit</span>
+                <span className="action-icon action-icon--green"><i className="fa-solid fa-building-columns" aria-hidden="true" /></span>
+                <span>
+                  <span className="block font-heading text-base font-bold">Deposit</span>
+                  <span className="mt-0.5 block text-xs font-normal text-muted-foreground">Add USDT funds</span>
+                </span>
               </>
             ) : (
               <><i className="fa-solid fa-plus mr-2" aria-hidden="true" /> Deposit</>

@@ -49,7 +49,7 @@ export function PaymentSettingsForm({ settings }: { settings: Settings | null })
 
   return (
     <form onSubmit={onSubmit} className="grid gap-6 lg:grid-cols-2">
-      <Card className="border-border/60 lg:col-span-2">
+      <Card className="surface-card rounded-2xl lg:col-span-2">
         <CardHeader>
           <CardTitle>USDT receiving wallets</CardTitle>
           <CardDescription>Users will see the address for their selected network when depositing.</CardDescription>
@@ -69,7 +69,7 @@ export function PaymentSettingsForm({ settings }: { settings: Settings | null })
         </CardContent>
       </Card>
 
-      <Card className="border-border/60 lg:col-span-2">
+      <Card className="surface-card rounded-2xl lg:col-span-2">
         <CardHeader>
           <CardTitle>Platform rules</CardTitle>
         </CardHeader>

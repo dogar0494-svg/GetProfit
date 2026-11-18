@@ -103,7 +103,7 @@ export function AdminPanel({
       <TabsContent value="overview">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {statCards.map((s) => (
-            <Card key={s.label} className="border-border/60">
+            <Card key={s.label} className="surface-card rounded-2xl">
               <CardContent className="flex items-center gap-4 p-5">
                 <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/15 text-primary">
                   <i className={`fa-solid ${s.icon} text-lg`} aria-hidden="true" />
@@ -118,7 +118,7 @@ export function AdminPanel({
         </div>
 
         <h3 className="mb-3 mt-8 text-lg font-semibold">Recent activity</h3>
-        <Card className="border-border/60">
+        <Card className="surface-card rounded-2xl">
           <CardContent className="p-0">
             <TxTable rows={allTransactions.slice(0, 12)} />
           </CardContent>
@@ -127,7 +127,7 @@ export function AdminPanel({
 
       {/* DEPOSITS */}
       <TabsContent value="deposits">
-        <Card className="border-border/60">
+        <Card className="surface-card rounded-2xl">
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -199,7 +199,7 @@ export function AdminPanel({
 
       {/* WITHDRAWALS */}
       <TabsContent value="withdrawals">
-        <Card className="border-border/60">
+        <Card className="surface-card rounded-2xl">
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -340,7 +340,7 @@ function UsersTable({
   const [amount, setAmount] = useState("")
 
   return (
-    <Card className="border-border/60">
+    <Card className="surface-card rounded-2xl">
       <CardContent className="p-0">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">

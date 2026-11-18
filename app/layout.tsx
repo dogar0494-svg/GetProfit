@@ -1,12 +1,17 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Poppins, Geist_Mono } from 'next/font/google'
+import { Sora, Inter, Geist_Mono } from 'next/font/google'
 import './globals.css'
 
-const poppins = Poppins({
-  variable: '--font-poppins',
+const sora = Sora({
+  variable: '--font-sora',
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700', '800'],
+})
+const inter = Inter({
+  variable: '--font-inter',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
 })
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
@@ -21,8 +26,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'dark',
-  themeColor: '#060d24',
+  colorScheme: 'light',
+  themeColor: '#f6f7f4',
 }
 
 export default function RootLayout({
@@ -31,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${sora.variable} ${inter.variable} ${geistMono.variable}`}>
       <head>
         <link
           rel="stylesheet"

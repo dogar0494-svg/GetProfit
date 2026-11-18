@@ -18,18 +18,18 @@ export default async function ProfilePage() {
     .toUpperCase()
 
   return (
-    <div className="app-bg flex min-h-dvh flex-col pb-24 md:pb-0">
-      <AppNav isAdmin={profile.role === "admin"} />
+    <div className="app-bg app-shell flex min-h-dvh flex-col pb-24 lg:pb-0">
+      <AppNav isAdmin={profile.role === "admin"} userName={profile.name || profile.username} userEmail={profile.email} />
       <Toaster position="top-center" richColors />
 
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8">
-        <Card className="referral-hero mb-8">
-          <CardContent className="flex items-center gap-4 p-6">
+      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+        <Card className="referral-hero mb-7 rounded-3xl">
+          <CardContent className="flex items-center gap-4 p-6 sm:p-7">
             <Avatar className="h-16 w-16 border border-white/40 bg-white/15 text-white">
-              <AvatarFallback className="bg-transparent text-lg font-bold text-white">{initials}</AvatarFallback>
+              <AvatarFallback className="bg-transparent font-heading text-lg font-bold text-white">{initials}</AvatarFallback>
             </Avatar>
             <div className="min-w-0">
-              <h1 className="truncate text-2xl font-bold">{profile.name || profile.username}</h1>
+              <h1 className="truncate font-heading text-2xl font-bold text-white sm:text-3xl">{profile.name || profile.username}</h1>
               <p className="truncate text-sm text-white/75">{profile.email}</p>
             </div>
             {profile.role === "admin" && <Badge className="plan-featured-badge ml-auto">Admin</Badge>}
@@ -37,9 +37,9 @@ export default async function ProfilePage() {
         </Card>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <Card className="glass-card lg:col-span-2">
+          <Card className="surface-card rounded-3xl lg:col-span-2">
             <CardHeader>
-              <CardTitle>Account details</CardTitle>
+              <CardTitle className="font-heading">Account details</CardTitle>
               <CardDescription>Update your personal information.</CardDescription>
             </CardHeader>
             <CardContent>
@@ -47,9 +47,9 @@ export default async function ProfilePage() {
             </CardContent>
           </Card>
 
-          <Card className="glass-card">
+          <Card className="surface-card rounded-3xl">
             <CardHeader>
-              <CardTitle>Referral program</CardTitle>
+              <CardTitle className="font-heading">Referral program</CardTitle>
               <CardDescription>
                 {referrals.length} {referrals.length === 1 ? "person has" : "people have"} joined with your code.
               </CardDescription>
@@ -69,9 +69,9 @@ export default async function ProfilePage() {
             </CardContent>
           </Card>
 
-          <Card className="glass-card">
+          <Card className="surface-card rounded-3xl">
             <CardHeader>
-              <CardTitle>Change password</CardTitle>
+              <CardTitle className="font-heading">Change password</CardTitle>
               <CardDescription>Choose a strong password you don&apos;t use elsewhere.</CardDescription>
             </CardHeader>
             <CardContent>

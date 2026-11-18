@@ -59,7 +59,7 @@ export function InvestDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button className="w-full" variant={featured ? "default" : "outline"}>
+          <Button className={featured ? "btn-gold w-full" : "w-full"} variant={featured ? "default" : "outline"}>
             Invest now
           </Button>
         }

@@ -107,7 +107,7 @@ export function PlansManager({ plans }: { plans: Plan[] }) {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {plans.map((p) => (
-          <Card key={p.id} className="border-border/60">
+          <Card key={p.id} className="surface-card rounded-2xl">
             <CardContent className="flex flex-col gap-3 p-5">
               <div className="flex items-center gap-3">
                 <span

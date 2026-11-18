@@ -60,11 +60,14 @@ export function WithdrawDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button className={shortcut ? "dashboard-shortcut dashboard-shortcut--withdraw" : "w-full bg-primary text-primary-foreground shadow-md hover:bg-primary/90"}>
+          <Button className={shortcut ? "action-card" : "w-full bg-primary text-primary-foreground shadow-md hover:bg-primary/90"}>
             {shortcut ? (
               <>
-                <span className="dashboard-shortcut-orb"><i className="fa-solid fa-wallet" aria-hidden="true" /></span>
-                <span>Withdraw</span>
+                <span className="action-icon action-icon--gold"><i className="fa-solid fa-wallet" aria-hidden="true" /></span>
+                <span>
+                  <span className="block font-heading text-base font-bold">Withdraw</span>
+                  <span className="mt-0.5 block text-xs font-normal text-muted-foreground">Cash out earnings</span>
+                </span>
               </>
             ) : (
               <><i className="fa-solid fa-arrow-up-from-bracket mr-2" aria-hidden="true" /> Withdraw</>

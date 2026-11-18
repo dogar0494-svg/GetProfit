@@ -7,69 +7,123 @@ import { Button } from "@/components/ui/button"
 import { signOut } from "@/lib/actions/auth"
 import { cn } from "@/lib/utils"
 
-const DESKTOP_LINKS = [
+const NAV_LINKS = [
   { href: "/dashboard", label: "Dashboard", icon: "fa-house" },
+  { href: "/plans", label: "VIP plans", icon: "fa-layer-group" },
   { href: "/trading", label: "Earnings", icon: "fa-bolt" },
   { href: "/team", label: "Team", icon: "fa-users" },
-  { href: "/plans", label: "VIP plans", icon: "fa-layer-group" },
   { href: "/profile", label: "Profile", icon: "fa-user" },
 ]
 
-const MOBILE_LINKS = [
-  { href: "/dashboard", label: "Dashboard", icon: "fa-house" },
-  { href: "/plans", label: "VIP plans", icon: "fa-cubes" },
-  { href: "/trading", label: "Earnings", icon: "fa-bolt" },
-  { href: "/dashboard#withdraw", label: "Withdraw", icon: "fa-wallet" },
-]
+const ADMIN_LINK = { href: "/admin", label: "Admin", icon: "fa-shield-halved" }
 
-export function AppNav({ isAdmin }: { isAdmin?: boolean }) {
+export function AppNav({
+  isAdmin,
+  userName,
+  userEmail,
+}: {
+  isAdmin?: boolean
+  userName?: string | null
+  userEmail?: string | null
+}) {
   const pathname = usePathname()
-  const links = isAdmin ? [...DESKTOP_LINKS, { href: "/admin", label: "Admin", icon: "fa-shield-halved" }] : DESKTOP_LINKS
+  const links = isAdmin ? [...NAV_LINKS, ADMIN_LINK] : NAV_LINKS
+  const displayName = userName || "Investor"
+  const initials = displayName
+    .split(" ")
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase()
 
   return (
     <>
-      <header className="dashboard-nav sticky top-0 z-40">
-        <div className="dashboard-nav-inner mx-auto flex w-full max-w-6xl items-center justify-between px-4 sm:px-6">
+      {/* Desktop sidebar */}
+      <aside className="app-sidebar" aria-label="Primary">
+        <div className="px-2">
           <BrandLogo href="/dashboard" />
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Primary navigation">
-            {links.map((link) => {
-              const active = pathname === link.href
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  aria-current={active ? "page" : undefined}
-                  className={cn("dashboard-nav-link", active && "dashboard-nav-link--active")}
-                >
-                  <i className={`fa-solid ${link.icon}`} aria-hidden="true" />
-                  {link.label}
-                </Link>
-              )
-            })}
-            <form action={signOut} className="ml-2">
-              <Button type="submit" variant="outline" size="sm" className="dashboard-signout">
-                <i className="fa-solid fa-right-from-bracket mr-1.5" aria-hidden="true" /> Sign out
+        </div>
+
+        <nav className="mt-9 flex flex-col gap-1.5" aria-label="Primary navigation">
+          {links.map((link) => {
+            const active = pathname === link.href
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={active ? "page" : undefined}
+                className={cn("sidebar-link", active && "sidebar-link--active")}
+              >
+                <i className={`fa-solid ${link.icon}`} aria-hidden="true" />
+                {link.label}
+              </Link>
+            )
+          })}
+        </nav>
+
+        <div className="mt-auto flex flex-col gap-3">
+          <div className="rounded-2xl bg-[#eaf3ec] p-4">
+            <p className="flex items-center gap-2 text-sm font-semibold text-primary">
+              <i className="fa-solid fa-seedling" aria-hidden="true" /> Grow daily
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+              Your active plans credit profit to your wallet every day.
+            </p>
+            <Link href="/plans" className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline">
+              Explore plans <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+            </Link>
+          </div>
+
+          <div className="sidebar-user">
+            <span className="sidebar-avatar" aria-hidden="true">{initials}</span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-semibold">{displayName}</p>
+              <p className="truncate text-xs text-muted-foreground">{userEmail || "InvestPro member"}</p>
+            </div>
+          </div>
+
+          <form action={signOut}>
+            <Button type="submit" variant="outline" className="w-full justify-start">
+              <i className="fa-solid fa-right-from-bracket mr-2" aria-hidden="true" /> Sign out
+            </Button>
+          </form>
+        </div>
+      </aside>
+
+      {/* Mobile top bar */}
+      <header className="mobile-topbar sticky top-0 z-40">
+        <div className="flex items-center justify-between px-4 py-3">
+          <BrandLogo href="/dashboard" />
+          <div className="flex items-center gap-2">
+            <Link
+              href="/profile"
+              className="grid h-10 w-10 place-items-center rounded-full border border-border bg-[#eaf3ec] text-primary"
+              aria-label="Open your profile"
+            >
+              <i className="fa-solid fa-user" aria-hidden="true" />
+            </Link>
+            <form action={signOut}>
+              <Button type="submit" variant="outline" size="icon" aria-label="Sign out">
+                <i className="fa-solid fa-right-from-bracket" aria-hidden="true" />
               </Button>
             </form>
-          </nav>
-          <Link href="/profile" className="dashboard-mobile-profile md:hidden" aria-label="Open your profile">
-            <i className="fa-solid fa-user" aria-hidden="true" />
-          </Link>
+          </div>
         </div>
       </header>
 
-      <nav className="dashboard-mobile-nav md:hidden" aria-label="Mobile navigation">
-        <div className="dashboard-mobile-nav-inner">
-          {MOBILE_LINKS.map((link) => {
-            const active = pathname === link.href || (link.href === "/dashboard" && pathname === "/dashboard")
+      {/* Mobile bottom nav — same links as the sidebar */}
+      <nav className="mobile-bottomnav" aria-label="Mobile navigation">
+        <div className="mx-auto flex max-w-xl items-stretch px-1">
+          {links.map((link) => {
+            const active = pathname === link.href
             return (
               <Link
-                key={link.label}
+                key={link.href}
                 href={link.href}
                 aria-current={active ? "page" : undefined}
-                className={cn("dashboard-mobile-nav-link", active && "dashboard-mobile-nav-link--active")}
+                className={cn("mobile-nav-link", active && "mobile-nav-link--active")}
               >
-                <span className="dashboard-mobile-nav-icon"><i className={`fa-solid ${link.icon}`} aria-hidden="true" /></span>
+                <i className={`fa-solid ${link.icon}`} aria-hidden="true" />
                 <span>{link.label}</span>
               </Link>
             )

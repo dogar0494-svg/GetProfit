@@ -6,7 +6,7 @@ export default function NotFound() {
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center gap-5 app-bg px-4 text-center">
       <BrandLogo />
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent/30 text-accent-foreground">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#eaf3ec] text-primary">
         <i className="fa-solid fa-compass text-2xl" aria-hidden="true" />
       </div>
       <div>

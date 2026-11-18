@@ -59,134 +59,171 @@ export default async function DashboardPage() {
   )
 
   const stats = [
-    { label: "Pending deposit", value: pendingDeposits, kind: "money", icon: "fa-clock-rotate-left", status: "PENDING", tone: "blue" },
-    { label: "Pending withdrawal", value: pendingWithdrawals, kind: "money", icon: "fa-hourglass-half", status: "PENDING", tone: "green" },
-    { label: "Total invest", value: Number(viewedProfile.total_invested), kind: "money", icon: "fa-chart-pie", status: "ACTIVE", tone: "orange" },
-    { label: "Referral bonus", value: Number(viewedProfile.referral_earnings ?? 0), kind: "money", icon: "fa-gift", status: "REWARD", tone: "violet" },
-    { label: "Team size", value: teamSize, kind: "count", icon: "fa-users", status: "DIRECT", tone: "teal" },
-    { label: "Team invest", value: teamInvest, kind: "money", icon: "fa-fire", status: "VOLUME", tone: "red" },
+    { label: "Pending deposit", value: pendingDeposits, kind: "money", icon: "fa-clock-rotate-left", status: "PENDING", chip: "bg-amber-100 text-amber-800", iconClass: "action-icon--gold" },
+    { label: "Pending withdrawal", value: pendingWithdrawals, kind: "money", icon: "fa-hourglass-half", status: "PENDING", chip: "bg-sky-100 text-sky-800", iconClass: "action-icon--teal" },
+    { label: "Total invest", value: Number(viewedProfile.total_invested), kind: "money", icon: "fa-chart-pie", status: "ACTIVE", chip: "bg-emerald-100 text-emerald-800", iconClass: "action-icon--green" },
+    { label: "Referral bonus", value: Number(viewedProfile.referral_earnings ?? 0), kind: "money", icon: "fa-gift", status: "REWARD", chip: "bg-violet-100 text-violet-800", iconClass: "action-icon--violet" },
+    { label: "Team size", value: teamSize, kind: "count", icon: "fa-users", status: "DIRECT", chip: "bg-teal-100 text-teal-800", iconClass: "action-icon--teal" },
+    { label: "Team invest", value: teamInvest, kind: "money", icon: "fa-fire", status: "VOLUME", chip: "bg-rose-100 text-rose-800", iconClass: "action-icon--gold" },
   ] as const
 
   return (
-    <div className="bubble-dashboard flex min-h-dvh flex-col overflow-x-hidden bg-background pb-28 md:pb-0">
+    <div className="app-bg app-shell flex min-h-dvh flex-col pb-24 lg:pb-0">
       {impersonation && <ImpersonationBanner userName={impersonation.targetName} />}
-      <AppNav isAdmin={profile.role === "admin"} />
+      <AppNav isAdmin={profile.role === "admin"} userName={profile.name || profile.username} userEmail={profile.email} />
       <Toaster position="top-center" richColors />
 
-      <main className="dashboard-main mx-auto w-full max-w-6xl flex-1 px-4 pb-10 pt-6 sm:px-6 sm:pt-8">
-        <div className="dashboard-welcome mb-6 flex flex-col gap-1 sm:mb-8">
-          <p className="dashboard-eyebrow">INVESTPRO / YOUR ACCOUNT</p>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-12 pt-6 sm:px-6 sm:pt-9">
+        {/* Greeting */}
+        <div className="mb-6 flex flex-col gap-1 sm:mb-8">
+          <p className="eyebrow">Your account</p>
+          <h1 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl">
             Welcome back, {viewedProfile.name?.split(" ")[0] || viewedProfile.username || "investor"}
           </h1>
-          <p className="text-sm text-muted-foreground">Your money, plans, and activity in one place.</p>
+          <p className="text-sm text-muted-foreground sm:text-base">Your money, plans, and activity in one place.</p>
         </div>
 
-        <section className="dashboard-totals mb-7" aria-label="Deposit and withdrawal totals">
-          <div className="dashboard-totals-half">
-            <span className="dashboard-summary-icon dashboard-summary-icon--deposit"><i className="fa-solid fa-building-columns" aria-hidden="true" /></span>
-            <div className="min-w-0">
-              <p className="dashboard-summary-label">Total deposit</p>
-              <p className="dashboard-summary-value">{formatCurrency(totalDeposits)}</p>
-              <p className="dashboard-summary-conversion">{formatUsdFromPkr(totalDeposits)} USDT</p>
+        {/* Wallet hero */}
+        <section className="wallet-hero mb-6 p-6 sm:mb-8 sm:p-8" aria-label="Wallet balance and totals">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/70">Wallet balance</p>
+              <p className="mt-2 font-heading text-4xl font-extrabold leading-none sm:text-5xl">
+                {formatCurrency(Number(viewedProfile.wallet_balance))}
+              </p>
+              <p className="mt-2.5 text-sm text-white/75">
+                ≈ {formatUsdFromPkr(Number(viewedProfile.wallet_balance))} USDT · 1 USD ≈ 280 PKR · USDT values are
+                estimates
+              </p>
             </div>
+            <span className="wallet-hero-chip">
+              <i className="fa-solid fa-scale-balanced" aria-hidden="true" /> Rate 1 : 280
+            </span>
           </div>
-          <div className="dashboard-totals-divider" aria-hidden="true" />
-          <div className="dashboard-totals-half">
-            <span className="dashboard-summary-icon dashboard-summary-icon--withdraw"><i className="fa-solid fa-wallet" aria-hidden="true" /></span>
-            <div className="min-w-0">
-              <p className="dashboard-summary-label">Total withdraw</p>
-              <p className="dashboard-summary-value">{formatCurrency(totalWithdrawals)}</p>
-              <p className="dashboard-summary-conversion">{formatUsdFromPkr(totalWithdrawals)} USDT</p>
+
+          <div className="mt-7 grid gap-3 sm:grid-cols-2">
+            <div className="wallet-hero-stat flex items-center gap-3.5">
+              <span className="wallet-hero-stat-icon">
+                <i className="fa-solid fa-building-columns" aria-hidden="true" />
+              </span>
+              <div className="min-w-0">
+                <p className="text-[0.65rem] font-bold uppercase tracking-[0.12em] text-white/65">Total deposit</p>
+                <p className="mt-0.5 truncate font-heading text-xl font-bold">{formatCurrency(totalDeposits)}</p>
+                <p className="text-xs text-white/65">{formatUsdFromPkr(totalDeposits)} USDT</p>
+              </div>
+            </div>
+            <div className="wallet-hero-stat flex items-center gap-3.5">
+              <span className="wallet-hero-stat-icon">
+                <i className="fa-solid fa-wallet" aria-hidden="true" />
+              </span>
+              <div className="min-w-0">
+                <p className="text-[0.65rem] font-bold uppercase tracking-[0.12em] text-white/65">Total withdraw</p>
+                <p className="mt-0.5 truncate font-heading text-xl font-bold">{formatCurrency(totalWithdrawals)}</p>
+                <p className="text-xs text-white/65">{formatUsdFromPkr(totalWithdrawals)} USDT</p>
+              </div>
             </div>
           </div>
         </section>
 
-        <section id="withdraw" className="dashboard-actions mb-7" aria-label="Quick actions">
+        {/* Quick actions */}
+        <section id="withdraw" className="mb-6 grid grid-cols-2 gap-3 sm:mb-8 sm:gap-4 lg:grid-cols-4" aria-label="Quick actions">
           <DepositDialog settings={settings} userId={viewedProfile.id} shortcut />
           <WithdrawDialog settings={settings} balance={Number(viewedProfile.wallet_balance)} shortcut />
-          <Link href="/plans" className="dashboard-shortcut dashboard-shortcut--plans">
-            <span className="dashboard-shortcut-orb"><i className="fa-solid fa-layer-group" aria-hidden="true" /></span>
-            <span>My plan</span>
+          <Link href="/plans" className="action-card">
+            <span className="action-icon action-icon--teal">
+              <i className="fa-solid fa-layer-group" aria-hidden="true" />
+            </span>
+            <span>
+              <span className="block font-heading text-base font-bold">My plan</span>
+              <span className="mt-0.5 block text-xs text-muted-foreground">Browse VIP plans</span>
+            </span>
           </Link>
-          <Link href="/team" className="dashboard-shortcut dashboard-shortcut--team">
-            <span className="dashboard-shortcut-orb"><i className="fa-solid fa-users" aria-hidden="true" /></span>
-            <span>Team</span>
+          <Link href="/team" className="action-card">
+            <span className="action-icon action-icon--violet">
+              <i className="fa-solid fa-users" aria-hidden="true" />
+            </span>
+            <span>
+              <span className="block font-heading text-base font-bold">Team</span>
+              <span className="mt-0.5 block text-xs text-muted-foreground">Referrals &amp; rewards</span>
+            </span>
           </Link>
         </section>
 
-        <section className="dashboard-trust-strip mb-8" aria-label="Platform highlights">
-          <span className="dashboard-trust-item">
-            <span className="dashboard-trust-icon"><i className="fa-solid fa-bolt" aria-hidden="true" /></span>
-            <span className="dashboard-trust-text"><small>Daily</small><strong>Profit Credit</strong></span>
+        {/* Trust strip */}
+        <section className="trust-strip mb-9" aria-label="Platform highlights">
+          <span className="trust-item">
+            <span className="trust-icon"><i className="fa-solid fa-bolt" aria-hidden="true" /></span>
+            <span className="trust-text"><small>Daily</small><strong>Profit Credit</strong></span>
           </span>
-          <span className="dashboard-trust-wave" aria-hidden="true">~</span>
-          <span className="dashboard-trust-item">
-            <span className="dashboard-trust-icon"><i className="fa-solid fa-shield-halved" aria-hidden="true" /></span>
-            <span className="dashboard-trust-text"><small>Secure</small><strong>USDT Deposits</strong></span>
+          <span className="trust-divider" aria-hidden="true" />
+          <span className="trust-item">
+            <span className="trust-icon"><i className="fa-solid fa-shield-halved" aria-hidden="true" /></span>
+            <span className="trust-text"><small>Secure</small><strong>USDT Deposits</strong></span>
           </span>
-          <span className="dashboard-trust-wave" aria-hidden="true">~</span>
-          <span className="dashboard-trust-item">
-            <span className="dashboard-trust-icon"><i className="fa-solid fa-circle-check" aria-hidden="true" /></span>
-            <span className="dashboard-trust-text"><small>Fast</small><strong>Admin Approval</strong></span>
+          <span className="trust-divider" aria-hidden="true" />
+          <span className="trust-item">
+            <span className="trust-icon"><i className="fa-solid fa-user-shield" aria-hidden="true" /></span>
+            <span className="trust-text"><small>Fast</small><strong>Admin Approval</strong></span>
           </span>
         </section>
 
-        <section className="mb-9" aria-labelledby="overview-heading">
+        {/* Overview */}
+        <section className="mb-10" aria-labelledby="overview-heading">
           <div className="mb-4 flex items-end justify-between gap-4">
             <div>
-              <p className="dashboard-eyebrow">A QUICK SNAPSHOT</p>
-              <h2 id="overview-heading" className="text-xl font-bold sm:text-2xl">Overview</h2>
+              <p className="eyebrow">A quick snapshot</p>
+              <h2 id="overview-heading" className="mt-1 font-heading text-2xl font-bold">Overview</h2>
             </div>
-            <div className="dashboard-period-pill"><i className="fa-solid fa-calendar-days" aria-hidden="true" /> All time</div>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-white px-3 py-1.5 text-[0.68rem] font-bold uppercase tracking-[0.08em] text-muted-foreground">
+              <i className="fa-solid fa-calendar-days text-primary" aria-hidden="true" /> All time
+            </span>
           </div>
 
-          <div className="dashboard-overview-grid">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
             {stats.map((stat) => (
-              <article key={stat.label} className={`dashboard-overview-card dashboard-overview-card--${stat.tone}`}>
-                <div className="dashboard-overview-card-top">
-                  <span className="dashboard-overview-icon"><i className={`fa-solid ${stat.icon}`} aria-hidden="true" /></span>
-                  <span className="dashboard-overview-status">{stat.status}</span>
+              <article key={stat.label} className="stat-card">
+                <div className="flex items-start justify-between gap-2">
+                  <span className={`action-icon ${stat.iconClass}`}>
+                    <i className={`fa-solid ${stat.icon}`} aria-hidden="true" />
+                  </span>
+                  <span className={`stat-chip ${stat.chip}`}>{stat.status}</span>
                 </div>
-                <div className="dashboard-overview-card-bottom">
-                  <p className="dashboard-overview-label">{stat.label}</p>
-                  <p className="dashboard-overview-value">
+                <div>
+                  <p className="text-[0.68rem] font-bold uppercase tracking-[0.1em] text-muted-foreground">{stat.label}</p>
+                  <p className="mt-1 font-heading text-2xl font-extrabold leading-tight sm:text-[1.7rem]">
                     {stat.kind === "money" ? formatCurrency(stat.value) : stat.value.toLocaleString("en-US")}
                   </p>
-                  {stat.kind === "money" && <p className="dashboard-overview-conversion">{formatUsdFromPkr(stat.value)} USDT</p>}
+                  {stat.kind === "money" && (
+                    <p className="mt-0.5 text-xs text-muted-foreground">{formatUsdFromPkr(stat.value)} USDT</p>
+                  )}
                 </div>
-                <i className={`dashboard-overview-watermark fa-solid ${stat.icon}`} aria-hidden="true" />
               </article>
             ))}
           </div>
         </section>
 
-        <section className="dashboard-exchange-strip mb-9" aria-label="Wallet balance and currency conversion">
-          <span className="dashboard-exchange-icon"><i className="fa-solid fa-wallet" aria-hidden="true" /></span>
-          <div className="min-w-0 flex-1">
-            <p className="dashboard-exchange-title">Wallet balance · {formatCurrency(Number(viewedProfile.wallet_balance))}</p>
-            <p className="dashboard-exchange-copy">≈ {formatUsdFromPkr(Number(viewedProfile.wallet_balance))} USDT · 1 USD ≈ 280 PKR · USDT values are estimates</p>
-          </div>
-          <span className="dashboard-exchange-badge">1 : 280</span>
-        </section>
-
-        <div className="grid gap-7 lg:grid-cols-5">
+        <div className="grid gap-8 lg:grid-cols-5">
           <section className="lg:col-span-3" aria-labelledby="active-plans-heading">
             <div className="mb-4 flex items-center justify-between gap-3">
               <div>
-                <p className="dashboard-eyebrow">GROWING BALANCE</p>
-                <h2 id="active-plans-heading" className="text-lg font-semibold">Active plans <span className="text-sm text-muted-foreground">({activeInvestments.length})</span></h2>
+                <p className="eyebrow">Growing balance</p>
+                <h2 id="active-plans-heading" className="mt-1 font-heading text-xl font-bold">
+                  Active plans{" "}
+                  <span className="text-base font-semibold text-muted-foreground">({activeInvestments.length})</span>
+                </h2>
               </div>
               <Button variant="ghost" size="sm" nativeButton={false} render={<Link href="/plans" />}>
                 Explore plans <i className="fa-solid fa-arrow-right ml-1.5" aria-hidden="true" />
               </Button>
             </div>
             {activeInvestments.length === 0 ? (
-              <Card className="dashboard-surface-card">
-                <CardContent className="flex flex-col items-center gap-3 py-10 text-center sm:py-12">
-                  <span className="dashboard-empty-icon"><i className="fa-solid fa-seedling" aria-hidden="true" /></span>
+              <Card className="surface-card rounded-3xl">
+                <CardContent className="flex flex-col items-center gap-3 py-12 text-center">
+                  <span className="action-icon action-icon--green h-14 w-14 rounded-2xl text-2xl">
+                    <i className="fa-solid fa-seedling" aria-hidden="true" />
+                  </span>
                   <div>
-                    <p className="font-semibold">No active plans yet</p>
+                    <p className="font-heading font-bold">No active plans yet</p>
                     <p className="mt-1 text-sm text-muted-foreground">Choose a plan to see your progress here.</p>
                   </div>
                   <Button nativeButton={false} render={<Link href="/plans">Browse plans</Link>} />
@@ -201,10 +238,10 @@ export default async function DashboardPage() {
 
           <section className="lg:col-span-2" aria-labelledby="recent-activity-heading">
             <div className="mb-4">
-              <p className="dashboard-eyebrow">LATEST UPDATES</p>
-              <h2 id="recent-activity-heading" className="text-lg font-semibold">Recent activity</h2>
+              <p className="eyebrow">Latest updates</p>
+              <h2 id="recent-activity-heading" className="mt-1 font-heading text-xl font-bold">Recent activity</h2>
             </div>
-            <Card className="dashboard-surface-card">
+            <Card className="surface-card rounded-3xl">
               <CardHeader className="pb-0"><CardTitle className="sr-only">Recent transactions</CardTitle></CardHeader>
               <CardContent className="pt-2"><TransactionList transactions={transactions.slice(0, 8)} /></CardContent>
             </Card>

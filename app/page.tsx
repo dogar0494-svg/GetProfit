@@ -9,9 +9,9 @@ import { formatCurrency } from "@/lib/format"
 
 const TICKER_ITEMS = [
   "Daily profit credited to wallets",
-  "1 USD ≈ 280 PKR fixed rate",
-  "USDT on BSC · opBNB · Polygon · TRC20",
-  "JazzCash & Easypaisa supported",
+  "All amounts in Pakistani Rupees (PKR)",
+  "JazzCash & Easypaisa deposits",
+  "Withdrawals to your own account",
   "Every deposit verified by a person",
   "3-level referral rewards",
 ]
@@ -25,11 +25,11 @@ const SHOWCASE_PLANS = [
 const FAQS = [
   {
     q: "How do I start earning?",
-    a: "Create a free account, deposit USDT on any of the four supported networks, upload your payment proof, and pick a plan once the deposit is approved. Your plan then credits profit to your wallet every day.",
+    a: "Create a free account, send PKR to the JazzCash or Easypaisa number shown in the app, upload your receipt screenshot, and pick a plan once the deposit is approved. Your plan then credits profit to your wallet every day.",
   },
   {
     q: "Which deposit methods are supported?",
-    a: "Deposits are made in USDT on BSC, opBNB, Polygon (POL) or TRC20. Payouts can be taken in USDT, and JazzCash and Easypaisa are supported for local settlement through the admin team.",
+    a: "Deposits are made in PKR through JazzCash or Easypaisa — send the amount to the account number shown in the app and upload your receipt screenshot. Withdrawals are paid to your own JazzCash or Easypaisa account after admin approval.",
   },
   {
     q: "How are deposits and withdrawals approved?",
@@ -40,8 +40,8 @@ const FAQS = [
     a: "Share your personal referral link from your dashboard. You earn a bonus when your referrals deposit, across three levels of your team, and VIP milestones unlock extra rewards.",
   },
   {
-    q: "What rate is used for USDT?",
-    a: "The platform uses a fixed planning rate of 1 USD ≈ 280 PKR for wallet credits and conversions shown in your account. USDT figures shown next to PKR amounts are estimates based on that rate.",
+    q: "Which currency does the platform use?",
+    a: "Everything on InvestPro is in Pakistani Rupees (PKR) — deposits, plan amounts, daily profit and withdrawals are all calculated and paid in PKR, with no conversion rates or hidden charges.",
   },
 ]
 
@@ -54,7 +54,7 @@ export default async function HomePage() {
 
   const steps = [
     { icon: "fa-user-plus", title: "Create account", desc: "Sign up in under a minute with your details." },
-    { icon: "fa-wallet", title: "Deposit funds", desc: "Send USDT, upload your proof, and get verified." },
+    { icon: "fa-wallet", title: "Deposit funds", desc: "Send PKR via JazzCash or Easypaisa, upload your receipt, and get verified." },
     { icon: "fa-layer-group", title: "Choose a plan", desc: "Pick an investment plan that matches your budget." },
     { icon: "fa-sack-dollar", title: "Earn daily", desc: "Watch your wallet grow with daily returns." },
   ]
@@ -96,8 +96,8 @@ export default async function HomePage() {
               Grow your wealth, <span className="hero-gradient-text">one day at a time.</span>
             </h1>
             <p className="max-w-md text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
-              InvestPro makes it simple to invest and earn daily returns. Flexible plans, secure USDT deposits, and
-              fast payouts — all in one bright, easy platform.
+              InvestPro makes it simple to invest and earn daily returns. Flexible plans, secure JazzCash &amp; Easypaisa
+              deposits, and fast payouts — all in one bright, easy platform.
             </p>
             <div className="flex flex-wrap gap-3">
               <Button size="lg" className="btn-gradient h-12 px-6 text-base" nativeButton={false} render={<Link href="/register" />}>
@@ -142,7 +142,7 @@ export default async function HomePage() {
                 <div className="phone-balance">
                   <p className="text-[0.62rem] font-bold uppercase tracking-[0.14em] text-white/65">Wallet balance</p>
                   <p className="mt-1 font-heading text-[1.65rem] font-extrabold leading-none">Rs 84,250</p>
-                  <p className="mt-1.5 text-[0.7rem] text-white/70">≈ 300.89 USDT · earning daily</p>
+                  <p className="mt-1.5 text-[0.7rem] text-white/70">Earning daily returns</p>
                 </div>
 
                 <div className="grid grid-cols-4 gap-2 text-center">
@@ -245,7 +245,7 @@ export default async function HomePage() {
           {[
             { value: "10K+", label: "Active investors" },
             { value: "Rs 50M+", label: "Paid out to members" },
-            { value: "4", label: "USDT networks supported" },
+            { value: "2", label: "Payment methods supported" },
             { value: "3 levels", label: "Referral reward depth" },
           ].map((s) => (
             <div key={s.label} className="text-center lg:text-left">
@@ -457,9 +457,9 @@ export default async function HomePage() {
               <span className="bento-icon bento-icon--green">
                 <i className="fa-solid fa-coins" aria-hidden="true" />
               </span>
-              <h3 className="font-heading text-xl font-bold">Four USDT networks</h3>
+              <h3 className="font-heading text-xl font-bold">JazzCash &amp; Easypaisa</h3>
               <p className="text-sm leading-relaxed text-muted-foreground">
-                Deposit on BSC, opBNB, Polygon or TRC20 — pick whichever is cheapest for you.
+                Deposit and withdraw with the local payment apps you already use — no wallets or conversions.
               </p>
             </CardContent>
           </Card>
@@ -486,7 +486,7 @@ export default async function HomePage() {
               {
                 icon: "fa-user-shield",
                 title: "Every deposit verified by a person",
-                desc: "Your payment proof is checked against the receiving wallet before your balance is credited.",
+                desc: "Your payment proof is checked against the receiving account before your balance is credited.",
               },
               {
                 icon: "fa-lock",

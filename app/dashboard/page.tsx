@@ -10,7 +10,7 @@ import { InvestmentCard } from "@/components/investment-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Toaster } from "@/components/ui/sonner"
-import { formatCurrency, formatUsdFromPkr } from "@/lib/format"
+import { formatCurrency } from "@/lib/format"
 
 export default async function DashboardPage() {
   const { profile } = await getCurrentUser()
@@ -91,14 +91,8 @@ export default async function DashboardPage() {
               <p className="mt-2 font-heading text-4xl font-extrabold leading-none sm:text-5xl">
                 {formatCurrency(Number(viewedProfile.wallet_balance))}
               </p>
-              <p className="mt-2.5 text-sm text-white/75">
-                ≈ {formatUsdFromPkr(Number(viewedProfile.wallet_balance))} USDT · 1 USD ≈ 280 PKR · USDT values are
-                estimates
-              </p>
+              <p className="mt-2.5 text-sm text-white/75">All amounts in Pakistani Rupees (PKR)</p>
             </div>
-            <span className="wallet-hero-chip">
-              <i className="fa-solid fa-scale-balanced" aria-hidden="true" /> Rate 1 : 280
-            </span>
           </div>
 
           <div className="mt-7 grid gap-3 sm:grid-cols-2">
@@ -109,7 +103,6 @@ export default async function DashboardPage() {
               <div className="min-w-0">
                 <p className="text-[0.65rem] font-bold uppercase tracking-[0.12em] text-white/65">Total deposit</p>
                 <p className="mt-0.5 truncate font-heading text-xl font-bold">{formatCurrency(totalDeposits)}</p>
-                <p className="text-xs text-white/65">{formatUsdFromPkr(totalDeposits)} USDT</p>
               </div>
             </div>
             <div className="wallet-hero-stat flex items-center gap-3.5">
@@ -119,7 +112,6 @@ export default async function DashboardPage() {
               <div className="min-w-0">
                 <p className="text-[0.65rem] font-bold uppercase tracking-[0.12em] text-white/65">Total withdraw</p>
                 <p className="mt-0.5 truncate font-heading text-xl font-bold">{formatCurrency(totalWithdrawals)}</p>
-                <p className="text-xs text-white/65">{formatUsdFromPkr(totalWithdrawals)} USDT</p>
               </div>
             </div>
           </div>
@@ -158,7 +150,7 @@ export default async function DashboardPage() {
           <span className="trust-divider" aria-hidden="true" />
           <span className="trust-item">
             <span className="trust-icon"><i className="fa-solid fa-shield-halved" aria-hidden="true" /></span>
-            <span className="trust-text"><small>Secure</small><strong>USDT Deposits</strong></span>
+            <span className="trust-text"><small>Secure</small><strong>PKR Deposits</strong></span>
           </span>
           <span className="trust-divider" aria-hidden="true" />
           <span className="trust-item">
@@ -193,9 +185,6 @@ export default async function DashboardPage() {
                   <p className="mt-1 font-heading text-2xl font-extrabold leading-tight sm:text-[1.7rem]">
                     {stat.kind === "money" ? formatCurrency(stat.value) : stat.value.toLocaleString("en-US")}
                   </p>
-                  {stat.kind === "money" && (
-                    <p className="mt-0.5 text-xs text-muted-foreground">{formatUsdFromPkr(stat.value)} USDT</p>
-                  )}
                 </div>
               </article>
             ))}

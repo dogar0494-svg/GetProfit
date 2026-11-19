@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner"
-import { formatCurrency, formatUsdt, formatUsdFromPkr, getUsdtNetworkFee } from "@/lib/format"
+import { formatCurrency } from "@/lib/format"
 import type { Settings } from "@/lib/types"
 
 export function WithdrawDialog({
@@ -28,27 +28,29 @@ export function WithdrawDialog({
   shortcut?: boolean
 }) {
   const [open, setOpen] = useState(false)
-  const [method, setMethod] = useState("USDT-BSC")
+  const [method, setMethod] = useState("JazzCash")
   const [amount, setAmount] = useState("")
   const [accountNumber, setAccountNumber] = useState("")
+  const [accountTitle, setAccountTitle] = useState("")
   const [loading, setLoading] = useState(false)
 
   async function handleSubmit() {
     if (!amount || Number(amount) <= 0) return toast.error("Enter a valid amount.")
-    if (Number(amount) > balance) return toast.error(`Insufficient balance. Available: ${formatCurrency(balance)} (${formatUsdFromPkr(balance)} USDT).`)
+    if (Number(amount) > balance) return toast.error(`Insufficient balance. Available: ${formatCurrency(balance)}.`)
     if (!accountNumber) return toast.error("Enter your account number.")
     setLoading(true)
     try {
       const fd = new FormData()
       fd.set("amount", amount)
       fd.set("payment_method", method)
-      fd.set("account_number", accountNumber)
+      fd.set("account_number", accountTitle.trim() ? `${accountNumber} (${accountTitle.trim()})` : accountNumber)
       const res = await submitWithdrawal(fd)
       if (!res.ok) throw new Error(res.error)
       toast.success("Withdrawal request submitted! Awaiting admin approval.")
       setOpen(false)
       setAmount("")
       setAccountNumber("")
+      setAccountTitle("")
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Something went wrong.")
     } finally {
@@ -77,9 +79,10 @@ export function WithdrawDialog({
       />
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Withdraw USDT</DialogTitle>
+          <DialogTitle>Withdraw funds</DialogTitle>
           <DialogDescription>
-            Available balance: <span className="font-semibold text-foreground">{formatCurrency(balance)}</span> ({formatUsdFromPkr(balance)} USDT). Binance network fee: <span className="font-semibold text-foreground">{formatUsdt(getUsdtNetworkFee(method))}</span>. You receive {formatCurrency(Math.max(0, Number(amount || 0) - getUsdtNetworkFee(method) * 280))} ({formatUsdFromPkr(Math.max(0, Number(amount || 0) - getUsdtNetworkFee(method) * 280))} USDT).
+            Available balance: <span className="font-semibold text-foreground">{formatCurrency(balance)}</span>. There is no
+            withdrawal fee — you receive the full amount in your own JazzCash or Easypaisa account after admin approval.
           </DialogDescription>
         </DialogHeader>
 
@@ -91,16 +94,14 @@ export function WithdrawDialog({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="USDT-BSC">USDT · BSC</SelectItem>
-                <SelectItem value="USDT-opBNB">USDT · opBNB</SelectItem>
-                <SelectItem value="USDT-POL">USDT · Polygon (POL)</SelectItem>
-                <SelectItem value="USDT-TRC20">USDT · TRC20</SelectItem>
+                <SelectItem value="JazzCash">JazzCash</SelectItem>
+                <SelectItem value="Easypaisa">Easypaisa</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="wd-amount">Amount (PKR)</Label>
+            <Label htmlFor="wd-amount">Amount (Rs)</Label>
             <Input
               id="wd-amount"
               type="number"
@@ -109,17 +110,41 @@ export function WithdrawDialog({
               onChange={(e) => setAmount(e.target.value)}
               placeholder="e.g. 7000"
             />
-            <p className="text-xs text-muted-foreground">Approximate USDT: {formatUsdFromPkr(Number(amount || 0))}</p>
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="wd-acc">Your USDT wallet address</Label>
+            <Label htmlFor="wd-acc">Your {method} account number</Label>
             <Input
               id="wd-acc"
               value={accountNumber}
               onChange={(e) => setAccountNumber(e.target.value)}
-              placeholder="0x... or T..."
+              placeholder="03XX-XXXXXXX"
             />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="wd-title">Account title / name</Label>
+            <Input
+              id="wd-title"
+              value={accountTitle}
+              onChange={(e) => setAccountTitle(e.target.value)}
+              placeholder="Name on your account"
+            />
+          </div>
+
+          <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground">Amount</span>
+              <span className="font-semibold">{formatCurrency(Number(amount || 0))}</span>
+            </div>
+            <div className="mt-2 flex items-center justify-between">
+              <span className="text-muted-foreground">Fee</span>
+              <span className="font-semibold">Rs 0</span>
+            </div>
+            <div className="mt-2 flex items-center justify-between border-t border-border pt-2">
+              <span className="text-muted-foreground">You receive</span>
+              <span className="font-semibold text-primary">{formatCurrency(Number(amount || 0))}</span>
+            </div>
           </div>
 
           <Button onClick={handleSubmit} disabled={loading} className="w-full">

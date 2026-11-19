@@ -14,7 +14,7 @@ const POINTS = [
   {
     icon: "fa-bolt",
     title: "Fast local payouts",
-    desc: "Withdraw in USDT, or settle through JazzCash and Easypaisa.",
+    desc: "Withdraw straight to your own JazzCash or Easypaisa account.",
   },
 ]
 
@@ -69,8 +69,8 @@ export function AuthBrandPanel() {
           <p className="text-xs text-white/65">Paid out</p>
         </div>
         <div>
-          <p className="font-heading text-2xl font-bold">4</p>
-          <p className="text-xs text-white/65">USDT networks</p>
+          <p className="font-heading text-2xl font-bold">2</p>
+          <p className="text-xs text-white/65">Payment methods</p>
         </div>
       </div>
     </div>

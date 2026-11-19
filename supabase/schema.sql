@@ -367,7 +367,6 @@ declare
   v_withdrawal_id uuid;
   v_payment_method text := nullif(btrim(p_payment_method), '');
   v_account_number text := nullif(btrim(p_account_number), '');
-  v_fee_usdt numeric;
   v_fee_amount numeric;
   v_net_amount numeric;
 begin
@@ -377,7 +376,7 @@ begin
   if p_amount is null or p_amount <= 0 or p_amount::text in ('NaN', 'Infinity', '-Infinity') then
     raise exception 'Withdrawal amount must be positive.';
   end if;
-  if v_payment_method is null or v_payment_method not in ('USDT-BSC', 'USDT-opBNB', 'USDT-POL', 'USDT-TRC20') then
+  if v_payment_method is null or v_payment_method not in ('JazzCash', 'Easypaisa') then
     raise exception 'Select a valid payment method.';
   end if;
   if v_account_number is null then
@@ -389,14 +388,8 @@ begin
   if v_current_balance is null or p_amount > v_current_balance then
     raise exception 'Insufficient balance.';
   end if;
-  v_fee_usdt := case v_payment_method
-    when 'USDT-BSC' then 0.01
-    when 'USDT-opBNB' then 0.015
-    when 'USDT-POL' then 0.03
-    when 'USDT-TRC20' then 1.5
-  end;
-  v_fee_amount := round(v_fee_usdt * 280 * 100) / 100;
-  v_net_amount := greatest(0, round((p_amount - v_fee_amount) * 100) / 100);
+  v_fee_amount := 0;
+  v_net_amount := p_amount;
   update public.profiles set wallet_balance = wallet_balance - p_amount where id = p_user_id;
   insert into public.transactions (
     user_id, type, amount, original_amount, fee_amount, net_amount,

@@ -17,25 +17,25 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner"
 import type { Settings } from "@/lib/types"
-import { getUsdtNetworkFee, formatUsdt, formatCurrency, formatUsdFromPkr } from "@/lib/format"
 
 export function DepositDialog({ settings, userId, shortcut = false }: { settings: Settings | null; userId: string; shortcut?: boolean }) {
   const [open, setOpen] = useState(false)
-  const [method, setMethod] = useState("USDT-BSC")
+  const [method, setMethod] = useState("JazzCash")
   const [amount, setAmount] = useState("")
   const [accountNumber, setAccountNumber] = useState("")
+  const [accountName, setAccountName] = useState("")
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
 
-  const networkDetails = {
-    "USDT-BSC": { label: "USDT · BSC", address: settings?.usdt_bsc_address },
-    "USDT-opBNB": { label: "USDT · opBNB", address: settings?.usdt_opbnb_address },
-    "USDT-POL": { label: "USDT · Polygon (POL)", address: settings?.usdt_polygon_address },
-    "USDT-TRC20": { label: "USDT · TRC20", address: settings?.usdt_trc20_address },
+  const methodDetails = {
+    JazzCash: { label: "JazzCash", number: settings?.jazzcash_number, name: settings?.jazzcash_name },
+    Easypaisa: { label: "Easypaisa", number: settings?.easypaisa_number, name: settings?.easypaisa_name },
   } as const
-  const accountInfo = networkDetails[method as keyof typeof networkDetails]
+  const accountInfo = methodDetails[method as keyof typeof methodDetails]
+  const configured = Boolean(accountInfo.number)
 
   async function handleSubmit() {
+    if (!configured) return toast.error(`${accountInfo.label} deposits are not available yet.`)
     if (!amount || Number(amount) <= 0) return toast.error("Enter a valid amount.")
     if (!file) return toast.error("Upload your payment proof screenshot.")
     setLoading(true)
@@ -51,14 +51,16 @@ export function DepositDialog({ settings, userId, shortcut = false }: { settings
       fd.set("amount", amount)
       fd.set("payment_method", method)
       fd.set("account_number", accountNumber)
+      fd.set("account_name", accountName)
       fd.set("proof_image", pub.publicUrl)
       const res = await submitDeposit(fd)
       if (!res.ok) throw new Error(res.error)
 
-      toast.success("USDT deposit submitted! Awaiting admin approval.")
+      toast.success("Deposit submitted! Awaiting admin approval.")
       setOpen(false)
       setAmount("")
       setAccountNumber("")
+      setAccountName("")
       setFile(null)
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Something went wrong.")
@@ -77,7 +79,7 @@ export function DepositDialog({ settings, userId, shortcut = false }: { settings
                 <span className="action-icon action-icon--green"><i className="fa-solid fa-building-columns" aria-hidden="true" /></span>
                 <span>
                   <span className="block font-heading text-base font-bold">Deposit</span>
-                  <span className="mt-0.5 block text-xs font-normal text-muted-foreground">Add USDT funds</span>
+                  <span className="mt-0.5 block text-xs font-normal text-muted-foreground">Add funds in PKR</span>
                 </span>
               </>
             ) : (
@@ -88,8 +90,8 @@ export function DepositDialog({ settings, userId, shortcut = false }: { settings
       />
       <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Deposit USDT</DialogTitle>
-          <DialogDescription>Send USDT from Binance to the selected address and network, then upload your transaction proof.</DialogDescription>
+          <DialogTitle>Deposit funds</DialogTitle>
+          <DialogDescription>Send PKR to the selected JazzCash or Easypaisa account, then upload your payment receipt screenshot.</DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
@@ -100,41 +102,53 @@ export function DepositDialog({ settings, userId, shortcut = false }: { settings
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="USDT-BSC">USDT · BSC</SelectItem>
-                <SelectItem value="USDT-opBNB">USDT · opBNB</SelectItem>
-                <SelectItem value="USDT-POL">USDT · Polygon (POL)</SelectItem>
-                <SelectItem value="USDT-TRC20">USDT · TRC20</SelectItem>
+                <SelectItem value="JazzCash">JazzCash</SelectItem>
+                <SelectItem value="Easypaisa">Easypaisa</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm">
-            <p className="text-muted-foreground">Send from Binance to:</p>
-            <p className="mt-1 font-semibold">{accountInfo.label}</p>
-            <p className="break-all font-mono text-base text-primary">{accountInfo.address ?? "Address not configured"}</p>
-            <p className="mt-2 text-xs text-muted-foreground">Binance withdrawal fee: {formatUsdt(getUsdtNetworkFee(method))}</p>
+            <p className="text-muted-foreground">Send PKR to this {accountInfo.label} account:</p>
+            {configured ? (
+              <>
+                <p className="mt-1 break-all font-mono text-base font-semibold text-primary">{accountInfo.number}</p>
+                {accountInfo.name && <p className="mt-1 font-semibold">{accountInfo.name}</p>}
+              </>
+            ) : (
+              <p className="mt-1 font-semibold text-destructive">{accountInfo.label} is not configured yet. Please check back later.</p>
+            )}
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="dep-amount">Deposit amount (USDT)</Label>
+            <Label htmlFor="dep-amount">Deposit amount (Rs)</Label>
             <Input
               id="dep-amount"
               type="number"
               min={1}
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="e.g. 25.00"
+              placeholder="e.g. 5000"
             />
-            <p className="text-xs text-muted-foreground">Wallet credit: {formatCurrency(Number(amount || 0) * 280)} ({formatUsdFromPkr(Number(amount || 0) * 280)} USDT)</p>
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="dep-acc">Your sending wallet address (optional)</Label>
+            <Label htmlFor="dep-acc">Your {accountInfo.label} account number</Label>
             <Input
               id="dep-acc"
               value={accountNumber}
               onChange={(e) => setAccountNumber(e.target.value)}
-              placeholder="0x... or T..."
+              placeholder="03XX-XXXXXXX"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="dep-name">Your account name (optional)</Label>
+            <Input
+              id="dep-name"
+              value={accountName}
+              onChange={(e) => setAccountName(e.target.value)}
+              placeholder="Name on your account"
             />
           </div>
 
@@ -148,7 +162,7 @@ export function DepositDialog({ settings, userId, shortcut = false }: { settings
             />
           </div>
 
-          <Button onClick={handleSubmit} disabled={loading} className="w-full">
+          <Button onClick={handleSubmit} disabled={loading || !configured} className="w-full">
             {loading ? "Submitting..." : "Submit deposit request"}
           </Button>
         </div>

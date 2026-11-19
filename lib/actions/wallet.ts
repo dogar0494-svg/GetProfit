@@ -1,6 +1,7 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
+import { formatCurrency } from "@/lib/format"
 import { revalidatePath } from "next/cache"
 
 type ActionResult = { ok: boolean; error?: string }
@@ -24,14 +25,16 @@ export async function submitDeposit(formData: FormData): Promise<ActionResult> {
   const { supabase, user } = await requireUser()
   if (!user) return { ok: false, error: "Not authenticated." }
 
-  const usdtAmount = Number(formData.get("amount"))
-  const amount = Math.round(usdtAmount * 280 * 100) / 100
+  const amount = Number(formData.get("amount"))
   const paymentMethod = String(formData.get("payment_method") || "")
   const accountNumber = String(formData.get("account_number") || "")
+  const accountName = String(formData.get("account_name") || "").trim()
   const proofImage = String(formData.get("proof_image") || "")
 
-  if (!amount || amount <= 0) return { ok: false, error: "Enter a valid amount." }
-  if (!paymentMethod) return { ok: false, error: "Select a payment method." }
+  if (!Number.isFinite(amount) || amount <= 0) return { ok: false, error: "Enter a valid amount." }
+  if (paymentMethod !== "JazzCash" && paymentMethod !== "Easypaisa") {
+    return { ok: false, error: "Select a valid payment method." }
+  }
   if (!proofImage) return { ok: false, error: "Upload your payment proof screenshot." }
 
   const { error } = await supabase.from("transactions").insert({
@@ -42,7 +45,7 @@ export async function submitDeposit(formData: FormData): Promise<ActionResult> {
     payment_method: paymentMethod,
     account_number: accountNumber,
     proof_image: proofImage,
-    description: `Deposit via ${paymentMethod}`,
+    description: accountName ? `Deposit via ${paymentMethod} — ${accountName}` : `Deposit via ${paymentMethod}`,
   })
   if (error) return { ok: false, error: error.message }
 
@@ -63,16 +66,11 @@ export async function submitWithdrawal(formData: FormData): Promise<ActionResult
   const amount = Number(formData.get("amount"))
   const paymentMethod = String(formData.get("payment_method") || "").trim()
   const accountNumber = String(formData.get("account_number") || "").trim()
-  const networkFees: Record<string, number> = {
-    "USDT-BSC": 0.01,
-    "USDT-opBNB": 0.015,
-    "USDT-POL": 0.03,
-    "USDT-TRC20": 1.5,
-  }
 
   if (!Number.isFinite(amount) || amount <= 0) return { ok: false, error: "Enter a valid amount." }
-  const networkFeeUsdt = networkFees[paymentMethod]
-  if (networkFeeUsdt === undefined) return { ok: false, error: "Select a valid payment method." }
+  if (paymentMethod !== "JazzCash" && paymentMethod !== "Easypaisa") {
+    return { ok: false, error: "Select a valid payment method." }
+  }
   if (!accountNumber) return { ok: false, error: "Enter your account number." }
 
   const { data: profile } = await supabase
@@ -84,17 +82,14 @@ export async function submitWithdrawal(formData: FormData): Promise<ActionResult
 
   if (amount > Number(profile.wallet_balance)) return { ok: false, error: "Insufficient balance." }
 
-  const feeAmount = Math.round(networkFeeUsdt * 280 * 100) / 100
-  const netAmount = Math.max(0, Math.round((amount - feeAmount) * 100) / 100)
-
-  // The atomic RPC recomputes the fee and validates the balance before reserving funds.
+  // No withdrawal fee: the user receives the full amount.
   const { error: atomicError } = await supabase.rpc("submit_withdrawal_atomic", {
     p_user_id: user.id,
     p_amount: amount,
     p_payment_method: paymentMethod,
     p_account_number: accountNumber,
-    p_fee_amount: feeAmount,
-    p_net_amount: netAmount,
+    p_fee_amount: 0,
+    p_net_amount: amount,
     p_withdrawal_date: new Date().toISOString().slice(0, 10),
   })
   if (atomicError) return { ok: false, error: atomicError.message }
@@ -122,7 +117,7 @@ export async function investInPlan(formData: FormData): Promise<ActionResult> {
   if (!amount || amount < Number(plan.min_deposit) || amount > Number(plan.max_deposit)) {
     return {
       ok: false,
-      error: `Amount must be between $${plan.min_deposit} and $${plan.max_deposit}.`,
+      error: `Amount must be between ${formatCurrency(Number(plan.min_deposit))} and ${formatCurrency(Number(plan.max_deposit))}.`,
     }
   }
 

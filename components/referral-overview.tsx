@@ -23,7 +23,7 @@ export function ReferralOverview({ referrals, earnings, activeCount }: { referra
         <div className="flex items-center justify-between rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-sm">
           <span className="text-muted-foreground">100-referral bonus</span>
           <span className={bonusUnlocked ? "font-semibold text-primary" : "font-medium"}>
-            {bonusUnlocked ? "$100,000 unlocked for admin review" : `${activeCount}/100 active referrals`}
+            {bonusUnlocked ? "Rs 100,000 unlocked for admin review" : `${activeCount}/100 active referrals`}
           </span>
         </div>
         {referrals.length === 0 ? (

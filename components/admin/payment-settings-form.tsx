@@ -17,10 +17,6 @@ export function PaymentSettingsForm({ settings }: { settings: Settings | null })
     easypaisa_number: settings?.easypaisa_number ?? "",
     easypaisa_name: settings?.easypaisa_name ?? "",
     referral_bonus_percent: String(settings?.referral_bonus_percent ?? 5),
-    usdt_bsc_address: settings?.usdt_bsc_address ?? "",
-    usdt_opbnb_address: settings?.usdt_opbnb_address ?? "",
-    usdt_polygon_address: settings?.usdt_polygon_address ?? "",
-    usdt_trc20_address: settings?.usdt_trc20_address ?? "",
   })
   const [loading, setLoading] = useState(false)
 
@@ -37,10 +33,6 @@ export function PaymentSettingsForm({ settings }: { settings: Settings | null })
       easypaisa_number: form.easypaisa_number,
       easypaisa_name: form.easypaisa_name,
       referral_bonus_percent: Number(form.referral_bonus_percent),
-      usdt_bsc_address: form.usdt_bsc_address,
-      usdt_opbnb_address: form.usdt_opbnb_address,
-      usdt_polygon_address: form.usdt_polygon_address,
-      usdt_trc20_address: form.usdt_trc20_address,
     })
     setLoading(false)
     if (res.ok) toast.success("Settings saved.")
@@ -51,19 +43,19 @@ export function PaymentSettingsForm({ settings }: { settings: Settings | null })
     <form onSubmit={onSubmit} className="grid gap-6 lg:grid-cols-2">
       <Card className="surface-card rounded-2xl lg:col-span-2">
         <CardHeader>
-          <CardTitle>USDT receiving wallets</CardTitle>
-          <CardDescription>Users will see the address for their selected network when depositing.</CardDescription>
+          <CardTitle>Receiving accounts</CardTitle>
+          <CardDescription>Users will see the number and account name for their selected method when depositing.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
           {([
-            ["usdt_bsc_address", "USDT · BSC"],
-            ["usdt_opbnb_address", "USDT · opBNB"],
-            ["usdt_polygon_address", "USDT · Polygon (POL)"],
-            ["usdt_trc20_address", "USDT · TRC20"],
-          ] as const).map(([key, label]) => (
+            ["jazzcash_number", "JazzCash number", "03XX-XXXXXXX"],
+            ["jazzcash_name", "JazzCash account name", "Account title"],
+            ["easypaisa_number", "Easypaisa number", "03XX-XXXXXXX"],
+            ["easypaisa_name", "Easypaisa account name", "Account title"],
+          ] as const).map(([key, label, placeholder]) => (
             <div key={key} className="flex flex-col gap-2">
-              <Label htmlFor={key}>{label} wallet address</Label>
-              <Input id={key} value={form[key]} onChange={(e) => update(key, e.target.value)} placeholder="Paste wallet address" />
+              <Label htmlFor={key}>{label}</Label>
+              <Input id={key} value={form[key]} onChange={(e) => update(key, e.target.value)} placeholder={placeholder} />
             </div>
           ))}
         </CardContent>

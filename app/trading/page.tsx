@@ -34,7 +34,7 @@ export default async function TradingPage() {
         <div className="mb-6 flex items-end justify-between gap-3">
           <div>
             <p className="eyebrow">Market desk</p>
-            <h1 className="mt-1 font-heading text-3xl font-bold tracking-tight text-balance sm:text-4xl">Crypto trading</h1>
+            <h1 className="mt-1 font-heading text-3xl font-bold tracking-tight text-balance sm:text-4xl">Market overview</h1>
             <p className="mt-1.5 text-sm text-muted-foreground sm:text-base">Track the market at a glance.</p>
           </div>
           <Badge className="shrink-0 border border-[#cfe6d4] bg-[#eaf3ec] px-3.5 py-1.5 text-sm text-primary hover:bg-[#eaf3ec]">
@@ -58,9 +58,9 @@ export default async function TradingPage() {
               <div>
                 <div className="flex items-center gap-2.5">
                   <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">₿</span>
-                  <span className="font-heading font-bold">{featured.name} / USDT</span>
+                  <span className="font-heading font-bold">{featured.name} / PKR</span>
                 </div>
-                <p className="mt-4 font-heading text-4xl font-extrabold tracking-tight">${featured.price.toLocaleString()}</p>
+                <p className="mt-4 font-heading text-4xl font-extrabold tracking-tight">{formatCurrency(featured.price)}</p>
               </div>
               <span className="rounded-full bg-success/10 px-3 py-1 text-xs font-bold text-success">{featured.change}</span>
             </div>
@@ -70,8 +70,8 @@ export default async function TradingPage() {
         </Card>
 
         <div className="grid gap-4 sm:grid-cols-3">
-          <Card className="asset-card rounded-2xl"><CardContent className="p-5"><p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">24h high</p><p className="mt-1.5 font-heading text-lg font-bold">$68,940.22</p></CardContent></Card>
-          <Card className="asset-card rounded-2xl"><CardContent className="p-5"><p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">24h low</p><p className="mt-1.5 font-heading text-lg font-bold">$64,108.30</p></CardContent></Card>
+          <Card className="asset-card rounded-2xl"><CardContent className="p-5"><p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">24h high</p><p className="mt-1.5 font-heading text-lg font-bold">Rs 68,940.22</p></CardContent></Card>
+          <Card className="asset-card rounded-2xl"><CardContent className="p-5"><p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">24h low</p><p className="mt-1.5 font-heading text-lg font-bold">Rs 64,108.30</p></CardContent></Card>
           <Card className="asset-card rounded-2xl"><CardContent className="p-5"><p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Market sentiment</p><p className="mt-1.5 font-heading text-lg font-bold text-success">Bullish</p></CardContent></Card>
         </div>
 
@@ -86,7 +86,7 @@ export default async function TradingPage() {
                   </div>
                   <span className="text-xs font-bold text-success">{asset.change}</span>
                 </div>
-                <p className="mt-3 font-heading text-xl font-bold">${asset.price.toLocaleString()}</p>
+                <p className="mt-3 font-heading text-xl font-bold">{formatCurrency(asset.price)}</p>
                 <div className="mt-2 h-10 text-muted-foreground"><MarketChart points={asset.points} /></div>
               </CardContent>
             </Card>

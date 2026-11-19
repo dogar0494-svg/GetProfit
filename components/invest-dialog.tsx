@@ -14,7 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { toast } from "sonner"
-import { formatCurrency, formatUsdFromPkr } from "@/lib/format"
+import { formatCurrency } from "@/lib/format"
 import type { Plan } from "@/lib/types"
 
 export function InvestDialog({
@@ -69,7 +69,7 @@ export function InvestDialog({
           <DialogTitle>Invest in {plan.name}</DialogTitle>
           <DialogDescription>
             Daily profit {plan.daily_profit}% for {plan.duration_days} days. Available balance{" "}
-            {formatCurrency(balance)} ({formatUsdFromPkr(balance)} USDT).
+            {formatCurrency(balance)}.
           </DialogDescription>
         </DialogHeader>
 
@@ -87,7 +87,6 @@ export function InvestDialog({
             <p className="text-xs text-muted-foreground">
               Range {formatCurrency(plan.min_deposit)} – {formatCurrency(plan.max_deposit)}
             </p>
-            <p className="text-xs text-muted-foreground">Approximate USDT: {formatUsdFromPkr(amt)}</p>
           </div>
 
           <div className="grid grid-cols-2 gap-3">

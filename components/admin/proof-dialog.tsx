@@ -13,7 +13,7 @@ export function ProofDialog({ url }: { url: string }) {
           </Button>
         }
       />
-      <DialogContent className="max-w-lg">
+      <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Payment proof</DialogTitle>
         </DialogHeader>

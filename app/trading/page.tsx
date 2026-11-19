@@ -12,9 +12,9 @@ const assets = [
   { symbol: "SOL", name: "Solana", price: 146.72, change: "-0.84%", color: "bg-teal-600", points: "0,28 18,38 36,31 54,45 72,39 90,52 108,45 126,64 144,52 162,68 180,59 198,76" },
 ]
 
-function MarketChart({ points }: { points: string }) {
+function MarketChart({ points, className = "h-40 w-full" }: { points: string; className?: string }) {
   return (
-    <svg viewBox="0 0 200 90" className="h-40 w-full" role="img" aria-label="Market price chart">
+    <svg viewBox="0 0 200 90" className={className} role="img" aria-label="Market price chart">
       <path d="M0 82H200M0 55H200M0 28H200" stroke="currentColor" strokeOpacity=".12" strokeWidth="1" />
       <polyline points={points} fill="none" stroke="var(--primary)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
       <polyline points={`${points} 198,90 0,90`} fill="var(--primary)" fillOpacity=".08" stroke="none" />
@@ -31,7 +31,7 @@ export default async function TradingPage() {
       <AppNav isAdmin={profile.role === "admin"} userName={profile.name || profile.username} userEmail={profile.email} />
       <Toaster position="top-center" richColors />
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 sm:py-9">
-        <div className="mb-6 flex items-end justify-between gap-3">
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="eyebrow">Market desk</p>
             <h1 className="mt-1 font-heading text-3xl font-bold tracking-tight text-balance sm:text-4xl">Market overview</h1>
@@ -60,7 +60,7 @@ export default async function TradingPage() {
                   <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">₿</span>
                   <span className="font-heading font-bold">{featured.name} / PKR</span>
                 </div>
-                <p className="mt-4 font-heading text-4xl font-extrabold tracking-tight">{formatCurrency(featured.price)}</p>
+                <p className="mt-4 break-words font-heading text-4xl font-extrabold tracking-tight">{formatCurrency(featured.price)}</p>
               </div>
               <span className="rounded-full bg-success/10 px-3 py-1 text-xs font-bold text-success">{featured.change}</span>
             </div>
@@ -87,7 +87,7 @@ export default async function TradingPage() {
                   <span className="text-xs font-bold text-success">{asset.change}</span>
                 </div>
                 <p className="mt-3 font-heading text-xl font-bold">{formatCurrency(asset.price)}</p>
-                <div className="mt-2 h-10 text-muted-foreground"><MarketChart points={asset.points} /></div>
+                <div className="mt-2 h-10 text-muted-foreground"><MarketChart points={asset.points} className="h-10 w-full" /></div>
               </CardContent>
             </Card>
           ))}

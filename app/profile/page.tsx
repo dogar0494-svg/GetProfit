@@ -32,7 +32,7 @@ export default async function ProfilePage() {
               <h1 className="truncate font-heading text-2xl font-bold text-white sm:text-3xl">{profile.name || profile.username}</h1>
               <p className="truncate text-sm text-white/75">{profile.email}</p>
             </div>
-            {profile.role === "admin" && <Badge className="plan-featured-badge ml-auto">Admin</Badge>}
+            {profile.role === "admin" && <Badge className="plan-featured-badge ml-auto shrink-0">Admin</Badge>}
           </CardContent>
         </Card>
 

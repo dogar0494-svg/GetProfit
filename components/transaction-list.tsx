@@ -54,7 +54,7 @@ export function TransactionList({ transactions }: { transactions: Transaction[] 
               <p className="truncate text-sm font-medium">{t.description || meta.label}</p>
               <p className="text-xs text-muted-foreground">{formatDateTime(t.created_at)}</p>
             </div>
-            <div className="flex flex-col items-end gap-1">
+            <div className="flex shrink-0 flex-col items-end gap-1">
               <span className={cn("text-sm font-semibold", credit ? "text-success" : "text-foreground")}>
                 {credit ? "+" : "-"}
                 {formatCurrency(t.amount)}

@@ -14,24 +14,24 @@ export function InvestmentCard({ investment }: { investment: Investment }) {
 
   return (
     <div className="glass-card rounded-2xl p-5">
-      <div className="mb-3 flex items-center justify-between">
-        <div>
-          <h3 className="font-semibold">{investment.plan_name}</h3>
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="truncate font-semibold">{investment.plan_name}</h3>
           <p className="text-sm text-muted-foreground">{formatCurrency(investment.amount)} invested</p>
         </div>
-        <Badge className={completed ? "bg-muted text-muted-foreground" : "bg-success/15 text-success"}>
+        <Badge className={`shrink-0 ${completed ? "bg-muted text-muted-foreground" : "bg-success/15 text-success"}`}>
           {completed ? "Completed" : "Active"}
         </Badge>
       </div>
 
       <div className="mb-4 grid grid-cols-3 gap-3 text-center">
-        <div className="rounded-lg bg-muted/40 p-2">
+        <div className="min-w-0 rounded-lg bg-muted/40 p-2">
           <p className="text-xs text-muted-foreground">Daily</p>
-          <p className="text-sm font-semibold text-success">{formatCurrency(dailyAmount)}</p>
+          <p className="break-words text-xs font-semibold text-success min-[400px]:text-sm">{formatCurrency(dailyAmount)}</p>
         </div>
-        <div className="rounded-lg bg-muted/40 p-2">
+        <div className="min-w-0 rounded-lg bg-muted/40 p-2">
           <p className="text-xs text-muted-foreground">Earned</p>
-          <p className="text-sm font-semibold">{formatCurrency(investment.profit_earned)}</p>
+          <p className="break-words text-xs font-semibold min-[400px]:text-sm">{formatCurrency(investment.profit_earned)}</p>
         </div>
         <div className="rounded-lg bg-muted/40 p-2">
           <p className="text-xs text-muted-foreground">Days left</p>

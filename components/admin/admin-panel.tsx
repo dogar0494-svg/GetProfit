@@ -105,12 +105,12 @@ export function AdminPanel({
           {statCards.map((s) => (
             <Card key={s.label} className="surface-card rounded-2xl">
               <CardContent className="flex items-center gap-4 p-5">
-                <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
                   <i className={`fa-solid ${s.icon} text-lg`} aria-hidden="true" />
                 </span>
-                <div>
+                <div className="min-w-0">
                   <p className="text-sm text-muted-foreground">{s.label}</p>
-                  <p className="text-xl font-bold">{s.isCurrency ? formatCurrency(s.value) : s.value}</p>
+                  <p className="break-words text-xl font-bold">{s.isCurrency ? formatCurrency(s.value) : s.value}</p>
                 </div>
               </CardContent>
             </Card>
@@ -130,7 +130,7 @@ export function AdminPanel({
         <Card className="surface-card rounded-2xl">
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full min-w-[760px] text-sm">
                 <thead className="border-b border-border text-left text-muted-foreground">
                   <tr>
                     <th className="px-4 py-3 font-medium">User</th>
@@ -154,7 +154,7 @@ export function AdminPanel({
                     <tr key={d.id} className="border-b border-border/50 last:border-0">
                       <td className="px-4 py-3">
                         <div className="font-medium">{d.user_name}</div>
-                        <div className="text-xs text-muted-foreground">{d.user_email}</div>
+                        <div className="break-all text-xs text-muted-foreground">{d.user_email}</div>
                       </td>
                       <td className="px-4 py-3 font-semibold">{formatCurrency(d.amount)}</td>
                       <td className="px-4 py-3 capitalize">{d.payment_method}</td>
@@ -202,7 +202,7 @@ export function AdminPanel({
         <Card className="surface-card rounded-2xl">
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full min-w-[820px] text-sm">
                 <thead className="border-b border-border text-left text-muted-foreground">
                   <tr>
                     <th className="px-4 py-3 font-medium">User</th>
@@ -227,12 +227,12 @@ export function AdminPanel({
                     <tr key={w.id} className="border-b border-border/50 last:border-0">
                       <td className="px-4 py-3">
                         <div className="font-medium">{w.user_name}</div>
-                        <div className="text-xs text-muted-foreground">{w.user_email}</div>
+                        <div className="break-all text-xs text-muted-foreground">{w.user_email}</div>
                       </td>
                       <td className="px-4 py-3 font-semibold">{formatCurrency(w.amount)}</td>
                       <td className="px-4 py-3 font-semibold text-primary">{formatCurrency(Number(w.net_amount ?? Number(w.amount) * 0.8))}</td>
                       <td className="px-4 py-3 capitalize">{w.payment_method}</td>
-                      <td className="px-4 py-3 font-mono text-xs">{w.account_number}</td>
+                      <td className="max-w-44 break-all px-4 py-3 font-mono text-xs">{w.account_number}</td>
                       <td className="px-4 py-3">
                         <span className={`rounded-full px-2 py-0.5 text-xs capitalize ${statusTone(w.status)}`}>
                           {w.status}
@@ -292,7 +292,7 @@ export function AdminPanel({
 function TxTable({ rows }: { rows: AdminTransaction[] }) {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-sm">
+      <table className="w-full min-w-[560px] text-sm">
         <thead className="border-b border-border text-left text-muted-foreground">
           <tr>
             <th className="px-4 py-3 font-medium">User</th>
@@ -343,7 +343,7 @@ function UsersTable({
     <Card className="surface-card rounded-2xl">
       <CardContent className="p-0">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[720px] text-sm">
             <thead className="border-b border-border text-left text-muted-foreground">
               <tr>
                 <th className="px-4 py-3 font-medium">User</th>
@@ -366,7 +366,7 @@ function UsersTable({
                 <tr key={u.id} className="border-b border-border/50 last:border-0 align-top">
                   <td className="px-4 py-3">
                     <div className="font-medium">{u.name || u.username}</div>
-                    <div className="text-xs text-muted-foreground">{u.email}</div>
+                    <div className="break-all text-xs text-muted-foreground">{u.email}</div>
                   </td>
                   <td className="px-4 py-3 font-semibold">{formatCurrency(u.wallet_balance)}</td>
                   <td className="px-4 py-3">{formatCurrency(u.total_invested)}</td>

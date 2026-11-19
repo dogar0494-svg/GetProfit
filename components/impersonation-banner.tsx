@@ -24,9 +24,9 @@ export function ImpersonationBanner({ userName }: { userName: string }) {
 
   return (
     <div className="border-b border-warning/30 bg-warning/10 px-4 py-2 text-warning">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 text-sm">
-        <span>You are viewing {userName}&apos;s account as an administrator.</span>
-        <Button size="sm" variant="outline" disabled={pending} onClick={stop}>
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 text-sm">
+        <span className="min-w-0">You are viewing {userName}&apos;s account as an administrator.</span>
+        <Button size="sm" variant="outline" className="shrink-0" disabled={pending} onClick={stop}>
           Return to admin
         </Button>
       </div>

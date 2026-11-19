@@ -88,7 +88,7 @@ export default async function DashboardPage() {
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/70">Wallet balance</p>
-              <p className="mt-2 font-heading text-4xl font-extrabold leading-none sm:text-5xl">
+              <p className="mt-2 break-words font-heading text-4xl font-extrabold leading-none sm:text-5xl">
                 {formatCurrency(Number(viewedProfile.wallet_balance))}
               </p>
               <p className="mt-2.5 text-sm text-white/75">All amounts in Pakistani Rupees (PKR)</p>
@@ -182,7 +182,7 @@ export default async function DashboardPage() {
                 </div>
                 <div>
                   <p className="text-[0.68rem] font-bold uppercase tracking-[0.1em] text-muted-foreground">{stat.label}</p>
-                  <p className="mt-1 font-heading text-2xl font-extrabold leading-tight sm:text-[1.7rem]">
+                  <p className="mt-1 break-words font-heading text-xl font-extrabold leading-tight min-[420px]:text-2xl sm:text-[1.7rem]">
                     {stat.kind === "money" ? formatCurrency(stat.value) : stat.value.toLocaleString("en-US")}
                   </p>
                 </div>

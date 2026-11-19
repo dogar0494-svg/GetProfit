@@ -63,7 +63,7 @@ export default async function HomePage() {
     <div className="app-bg flex min-h-dvh flex-col">
       {/* Header */}
       <header className="landing-header sticky top-0 z-40">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-3 py-3 sm:px-6">
           <BrandLogo />
           <nav className="hidden items-center gap-7 text-sm font-semibold text-muted-foreground lg:flex" aria-label="Sections">
             <Link href="#plans" className="hover:text-primary">Plans</Link>
@@ -71,7 +71,7 @@ export default async function HomePage() {
             <Link href="#features" className="hover:text-primary">Features</Link>
             <Link href="#faq" className="hover:text-primary">FAQ</Link>
           </nav>
-          <nav className="flex items-center gap-2">
+          <nav className="flex shrink-0 items-center gap-1.5 sm:gap-2">
             {user ? (
               <Button nativeButton={false} render={<Link href="/dashboard">Dashboard</Link>} />
             ) : (
@@ -92,7 +92,7 @@ export default async function HomePage() {
               <span className="mr-2 h-2 w-2 rounded-full bg-[#c9a227]" aria-hidden="true" />
               Trusted by investors across Pakistan
             </Badge>
-            <h1 className="font-heading text-balance text-5xl font-extrabold leading-[1.05] tracking-tight lg:text-6xl">
+            <h1 className="font-heading text-balance text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
               Grow your wealth, <span className="hero-gradient-text">one day at a time.</span>
             </h1>
             <p className="max-w-md text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">

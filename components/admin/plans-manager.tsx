@@ -166,7 +166,7 @@ export function PlansManager({ plans }: { plans: Plan[] }) {
                 <Input id="p-max" type="number" value={form.max_deposit} onChange={(e) => update("max_deposit", e.target.value)} required />
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="p-daily">Daily %</Label>
                 <Input id="p-daily" type="number" step="0.1" value={form.daily_profit} onChange={(e) => update("daily_profit", e.target.value)} required />

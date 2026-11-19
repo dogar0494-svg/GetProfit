@@ -124,7 +124,7 @@ export function AppNav({
                 className={cn("mobile-nav-link", active && "mobile-nav-link--active")}
               >
                 <i className={`fa-solid ${link.icon}`} aria-hidden="true" />
-                <span>{link.label}</span>
+                <span className="w-full truncate px-0.5">{link.label}</span>
               </Link>
             )
           })}
